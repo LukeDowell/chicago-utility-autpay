@@ -6,7 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
-    id("org.springframework.experimental.aot") version "0.11.0-RC1"
+    id("org.springframework.experimental.aot") version "0.11.0-M1"
 }
 
 group = "dev.dowell"
