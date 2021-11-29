@@ -1,0 +1,11 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    stream:
+      bindings:
+        tryToPayBill-out-0:
+          destination: water-out-bill-paid
+      kafka:
+        binder:
+          brokers: localhost:29092,localhost:39092
