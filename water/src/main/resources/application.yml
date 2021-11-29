@@ -4,6 +4,8 @@ spring:
   cloud:
     stream:
       bindings:
+        tryToPayBill-in-0:
+          destination: water-in-try-to-pay-bill
         tryToPayBill-out-0:
           destination: water-out-bill-paid
       kafka:

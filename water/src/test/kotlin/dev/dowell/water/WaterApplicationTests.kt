@@ -8,9 +8,11 @@ import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.cloud.stream.binder.test.InputDestination
 import org.springframework.cloud.stream.binder.test.OutputDestination
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration
 import org.springframework.context.annotation.Import
+import org.springframework.messaging.support.MessageBuilder
 import reactor.core.publisher.Flux
 import java.time.ZonedDateTime
 
@@ -23,10 +25,10 @@ class WaterApplicationTests {
     lateinit var billPaymentService: BillPaymentService
 
     @Autowired
-    lateinit var outputDestination: OutputDestination
+    lateinit var inputDestination: InputDestination
 
     @Autowired
-    lateinit var application: WaterApplication
+    lateinit var outputDestination: OutputDestination
 
     @Test
     fun contextLoads() {
@@ -34,11 +36,11 @@ class WaterApplicationTests {
 
     @Test
     fun `it should emit a bill paid event when the water bill is successfully paid`() {
-        `when`(billPaymentService.payIfNecessary()).thenReturn(Flux.just(WaterBillPaidEvent("10.00", ZonedDateTime.now())))
-        application.tryToPayBill()
+        `when`(billPaymentService.payIfNecessary()).thenReturn(WaterBillPaidEvent("10.00", ZonedDateTime.now()))
 
+        inputDestination.send(MessageBuilder.withPayload("").build(), "water-in-try-to-pay-bill")
         val message = outputDestination.receive(1000L, "water-out-bill-paid")
-        val payload = Configuration.defaultConfiguration().jsonProvider().parse(message.payload.toString())
+        val payload = Configuration.defaultConfiguration().jsonProvider().parse(String(message.payload))
 
         assertThat(JsonPath.read<String>(payload, "$.amountPaid")).isNotNull
         assertThat(JsonPath.read<String>(payload, "$.timestamp")).isNotNull

@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     val springCloudStreamVersion = "3.2.0-RC1"
-    val springCloudFunctionVersion = "3.1.5"
+    val springCloudFunctionVersion = "3.1.4"
     val jsoupVersion = "1.14.3"
 
     implementation("org.springframework.cloud:spring-cloud-stream:$springCloudStreamVersion")
